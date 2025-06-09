@@ -1,7 +1,9 @@
 import re
+import time
 import string
 import random
 import requests
+import subprocess
 from json import dumps
 from pygments import highlight, lexers, formatters
 
@@ -87,7 +89,11 @@ formatted_json = dumps({
         "ig_did": re.findall(r'"_js_ig_did":{"value":"([a-zA-Z0-9\-]+)"', response.text)[0],
         "mid": re.findall(r'"_js_mid":{"value":"([a-zA-Z0-9\-]+)"', response.text)[0],
         "csrftoken": re.findall(r'"csrf_token":"(.*?)"', response.text)[0]
-    }
+    },
+    "Blank-Password": "Juz0.@!#",
+    "Encrypted-Password": subprocess.check_output([
+        "node", "c.js", "237", "91b03050a79fb0148debef99bcd76494707018c3005a90d1a4eab63e1f38bc20", "Juz0.@!#", str(int(time.time()))
+    ]).decode().strip()
 }, indent = 4)
 
 print(highlight(formatted_json, lexers.JsonLexer(), formatters.TerminalFormatter()))
